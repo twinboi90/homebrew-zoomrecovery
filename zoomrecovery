@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# 1. Close Zoom.us if open
+osascript -e 'quit app "zoom.us"'
+sleep 2
+
+# 2. Turn off WiFi
+echo "Turning off WiFi..."
+sudo networksetup -setairportpower en0 off
+sleep 1
+
+# 3. Spoof MAC address (requires passwordless sudo for spoof-mac)
+echo "Randomizing MAC address..."
+/opt/homebrew/bin/spoof-mac randomize en0
+sleep 1
+
+# 4. Wipe specific Zoom .db files
+ZOOMDATA="$HOME/Library/Application Support/zoom.us/data"
+FILES=("zoomus.zmdb.default.noenc.rlock.db" "zoomus.enc.db" "zoommeeting.enc.db")
+
+for file in "${FILES[@]}"; do
+  fullpath="$ZOOMDATA/$file"
+  if [ -f "$fullpath" ]; then
+    : > "$fullpath"
+    echo "Wiped $fullpath"
+  else
+    echo "File not found: $fullpath"
+  fi
+done
+
+# 5. Turn WiFi back on
+echo "Turning WiFi back on..."
+sudo networksetup -setairportpower en0 on
+sleep 1
+
+# 6. Open Zoom.us again
+echo "Opening Zoom..."
+open -a "zoom.us"
+
+echo "Zoom 1132 fix complete!"
