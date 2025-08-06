@@ -16,5 +16,6 @@ Zoom Error 1132 is a known issue that prevents some users from joining or hostin
 To install via Homebrew:
 
 ```bash
-brew tap dbrowder23/ZoomRecovery
+brew tap yourusername/zoomrecovery
 brew install zoomrecovery
+
