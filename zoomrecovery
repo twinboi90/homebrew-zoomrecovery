@@ -1,20 +1,40 @@
 #!/bin/bash
 
-# 1. Close Zoom.us if open
+# Check if running as root
+if [[ "$EUID" -ne 0 ]]; then
+  echo "[!] Some functions (e.g., spoofing MAC address, WiFi control) require root."
+  echo "[!] Please run with sudo if you want full functionality:"
+  echo "    sudo zoomrecovery"
+  echo ""
+  echo "[*] Continuing with partial functionality (Zoom data cleanup)..."
+  PARTIAL_MODE=true
+else
+  PARTIAL_MODE=false
+fi
+
+# Close Zoom.us if open
 osascript -e 'quit app "zoom.us"'
 sleep 2
 
-# 2. Turn off WiFi
-echo "Turning off WiFi..."
-sudo networksetup -setairportpower en0 off
-sleep 1
+# Turn off WiFi (only if root)
+if [[ "$PARTIAL_MODE" = false ]]; then
+  echo "Turning off WiFi..."
+  networksetup -setairportpower en0 off
+  sleep 1
+else
+  echo "[!] Skipping WiFi disable (requires root)"
+fi
 
-# 3. Spoof MAC address (requires passwordless sudo for spoof-mac)
-echo "Randomizing MAC address..."
-/opt/homebrew/bin/spoof-mac randomize en0
-sleep 1
+# Spoof MAC address (only if root)
+if [[ "$PARTIAL_MODE" = false ]]; then
+  echo "[*] Spoofing MAC address..."
+  /opt/homebrew/bin/spoof-mac randomize en0
+  sleep 1
+else
+  echo "[!] Skipping MAC spoofing (requires root)"
+fi
 
-# 4. Wipe specific Zoom .db files
+# Wipe specific Zoom .db files
 ZOOMDATA="$HOME/Library/Application Support/zoom.us/data"
 FILES=("zoomus.zmdb.default.noenc.rlock.db" "zoomus.enc.db" "zoommeeting.enc.db")
 
@@ -28,12 +48,16 @@ for file in "${FILES[@]}"; do
   fi
 done
 
-# 5. Turn WiFi back on
-echo "Turning WiFi back on..."
-sudo networksetup -setairportpower en0 on
-sleep 1
+# Turn WiFi back on (only if root)
+if [[ "$PARTIAL_MODE" = false ]]; then
+  echo "Turning WiFi back on..."
+  networksetup -setairportpower en0 on
+  sleep 1
+else
+  echo "[!] Skipping WiFi re-enable (requires root)"
+fi
 
-# 6. Open Zoom.us again
+# Open Zoom.us again
 echo "Opening Zoom..."
 open -a "zoom.us"
 
