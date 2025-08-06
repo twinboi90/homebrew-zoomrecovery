@@ -1,2 +1,20 @@
 # ZoomRecovery
-Got an 1132 on a Mac device? This script will fix that for you.
+
+A macOS utility to automatically resolve Zoom Error 1132 and relaunch Zoom.
+
+Zoom Error 1132 is a known issue that prevents some users from joining or hosting meetings. This script automates the recovery process by performing a targeted cleanup of Zoom-related user data and restarting the application in a clean state.
+
+## Features
+
+- Detects and resolves Error 1132 on Zoom
+- Restarts Zoom automatically after repair
+- Requires no manual intervention
+- macOS-only
+
+## Installation
+
+To install via Homebrew:
+
+```bash
+brew tap dbrowder23/ZoomRecovery
+brew install zoomrecovery
