@@ -1,0 +1,16 @@
+name: Trigger tap formula update
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send repository_dispatch to homebrew-zoomrecovery
+        run: |
+          curl -X POST https://api.github.com/repos/twinboi90/homebrew-zoomrecovery/dispatches \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+            -d '{"event_type":"release-trigger"}'
