@@ -9,3 +9,6 @@
 # Binary/script artifacts
 zoomrecovery
 *.tar.gz
+
+# Backup files
+*.bak
