@@ -2,7 +2,7 @@ class Zoomrecovery < Formula
   desc "Fix Zoom Error 1132 on macOS"
   homepage "https://github.com/twinboi90/ZoomRecovery"
   url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.0.9.tar.gz"
-  sha256 "bda35c54e5167ed0b4148d8ddd439bc4c8f202cfc28b4e0ef3ddbfc496965c6a"
+  sha256 "09bcc779a4c2b9e3765cda78a9942d319542f969386dae335d7e5f57e8331a54"
   license "MIT"
 
   depends_on "spoof-mac"
