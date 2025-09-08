@@ -9,6 +9,7 @@ class Zoomrecovery < Formula
   depends_on "spoof-mac"
 
   def install
+    inreplace "zoomrecovery", "VERSION_PLACEHOLDER", version
     bin.install "zoomrecovery"
   end
 end
