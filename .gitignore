@@ -7,7 +7,7 @@
 *.swo
 
 # Binary/script artifacts
-zoomrecovery
+brew_bump_latest
 *.tar.gz
 
 # Backup files
