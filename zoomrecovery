@@ -2,9 +2,11 @@
 
 # Determine the intended user and home dir even when running via sudo
 TARGET_USER="${SUDO_USER:-$USER}"
+CONSOLE_USER="$(stat -f %Su /dev/console)"
+TARGET_HOME="$(eval echo "~${TARGET_USER}")"
+CONSOLE_HOME="$(eval echo "~${CONSOLE_USER}")"
 
 # macOS-safe way to expand a user's home
-TARGET_HOME="$(eval echo "~${TARGET_USER}")"
 export TARGET_USER TARGET_HOME
 
 # Fallback to the console session user if TARGET_HOME is empty or invalid
