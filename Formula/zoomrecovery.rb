@@ -4,7 +4,16 @@ class Zoomrecovery < Formula
   url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.1.0.a.tar.gz"
   sha256 "553c8a4f553aa138a4847b39c1d055da71748b3d9fde9bdc7b63cc2caf339532"
   version "1.1.0.a"
+  
+  depends_on "spoof-mac"
 
   def install
-    bin.install "zoomrecovery" 
+    chmod 0755, "zoomrecovery"
+    bin.install "zoomrecovery"
   end
+
+  test do
+    out = shell_output("#{bin}/zoomrecovery --version")
+    assert_match version.to_s, out
+  end
+end
