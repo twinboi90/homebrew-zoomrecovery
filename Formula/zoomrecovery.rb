@@ -1,8 +1,8 @@
 class Zoomrecovery < Formula
   desc "Reset Zoom state and spoof network identity for Zoom"
   homepage "https://github.com/twinboi90/ZoomRecovery"
-  url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/1.1.0.a.tar.gz"
-  sha256 "553c8a4f553aa138a4847b39c1d055da71748b3d9fde9bdc7b63cc2caf339532"
+  url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/null.tar.gz"
+  sha256 "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed"
   version "1.1.0"
 
   def install
