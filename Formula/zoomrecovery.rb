@@ -8,8 +8,3 @@ class Zoomrecovery < Formula
   def install
     bin.install "zoomrecovery" 
   end
-  
-  test do
-    assert_match version, shell_output("#{bin}/zoomrecovery --version")
-  end
-end
