@@ -12,3 +12,4 @@ class Zoomrecovery < Formula
     assert_match version, shell_output("#{bin}/zoomrecovery --version")
   end
 end
+end
