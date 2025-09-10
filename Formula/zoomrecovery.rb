@@ -6,12 +6,9 @@ class Zoomrecovery < Formula
   version "1.1.0.a"
 
   def install
-    inreplace "zoomrecovery", "VERSION_PLACEHOLDER", version.to_s
-    chmod 0755, "zoomrecovery"
-    bin.install "zoomrecovery"
-  end
+    bin.install "zoomrecovery" 
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/zoomrecovery --version")
+    assert_match version, shell_output("#{bin}/zoomrecovery --version")
   end
 end
