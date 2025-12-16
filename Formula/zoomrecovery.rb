@@ -8,6 +8,9 @@ class Zoomrecovery < Formula
   depends_on "spoof-mac"
 
 def install
+  # Replace any existing BAKED_VERSION="..." line (placeholder or baked value)
+  # with the formula version string. Robust against both placeholder and
+  # baked-version tarballs and avoids passing a Version object to inreplace.
   inreplace "zoomrecovery" do |s|
     s.gsub!(/BAKED_VERSION=".*?"/, "BAKED_VERSION=\"#{version.to_s}\"")
   end
