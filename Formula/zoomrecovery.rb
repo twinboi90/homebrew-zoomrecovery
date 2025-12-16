@@ -7,10 +7,11 @@ class Zoomrecovery < Formula
   
   depends_on "spoof-mac"
 
-  def install
-    chmod 0755, "zoomrecovery"
-    bin.install "zoomrecovery"
-  end
+def install
+  inreplace "zoomrecovery", "VERSION_PLACEHOLDER", version
+  chmod 0755, "zoomrecovery"
+  bin.install "zoomrecovery"
+end
 
   test do
     out = shell_output("#{bin}/zoomrecovery --version")
