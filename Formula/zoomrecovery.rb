@@ -8,7 +8,10 @@ class Zoomrecovery < Formula
   depends_on "spoof-mac"
 
 def install
-  inreplace "zoomrecovery", "VERSION_PLACEHOLDER", version
+  inreplace "zoomrecovery" do |s|
+    s.gsub!(/BAKED_VERSION=".*?"/, "BAKED_VERSION=\"#{version.to_s}\"")
+  end
+
   chmod 0755, "zoomrecovery"
   bin.install "zoomrecovery"
 end
