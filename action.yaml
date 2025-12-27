@@ -1,5 +1,5 @@
 name: 'Setup Homebrew Zoomrecovery'
-description: 'Installs Homebrew (if missing), taps twinboi90/zoomrecovery, installs the zoomrecovery formula, and persists environment variables'
+description: 'Installs Homebrew (if missing), taps/installs twinboi90/zoomrecovery, and persists environment variables'
 inputs:
   tap:
     description: 'Homebrew tap to add (owner/repo)'
