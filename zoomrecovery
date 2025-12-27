@@ -29,9 +29,10 @@ if [[ $EUID -ne 0 ]]; then
     exit 0
   fi
   echo "[!] sudo failed; continuing with partial functionality (Zoom data cleanup)…"
+  exit 1
+fi
 
 # Check if running as root
-# Root check
 if [[ "$EUID" -ne 0 ]]; then
   echo "[!] Some functions (e.g., spoofing MAC address, interface control) require root."
   echo "[!] Please run with sudo if you want full functionality:"
@@ -295,11 +296,9 @@ if [[ "$PARTIAL_MODE" = false ]]; then
       fi
     done
   fi
-else
-  echo "[!] Skipping MAC spoofing (requires sudo)"
 fi
 
-# Ensure $HOME points to the logged-in user’s home when run under sudo
+# Ensure $HOME points to the logged-in user's home when run under sudo
 if [ -z "${TARGET_HOME}" ] || [ ! -d "${TARGET_HOME}" ]; then
   CONSOLE_USER="$(stat -f %Su /dev/console)"
   TARGET_HOME="$(eval echo "~${CONSOLE_USER}")"
@@ -326,9 +325,8 @@ done
 # Restore default globbing behavior
 shopt -u nullglob
 
-#Reopen Zoom
 # Wipe specific Zoom .db files
-# Ensure $HOME points to the logged-in user’s home when run under sudo
+# Ensure $HOME points to the logged-in user's home when run under sudo
 if [[ "$EUID" -eq 0 && -n "$SUDO_USER" ]]; then
   export HOME="$(eval echo "~$SUDO_USER")"
 fi
