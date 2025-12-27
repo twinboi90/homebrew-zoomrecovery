@@ -1,32 +1,109 @@
-name: Install Zoomrecovery (test)
+name: "Setup Homebrew Zoomrecovery"
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+    - name: Ensure Homebrew present (install if missing)
+      shell: bash
+      run: |
+        set -euo pipefail
+        echo "Checking for brew..."
+        if command -v brew >/dev/null 2>&1; then
+          echo "brew found: $(brew --version | head -n1)"
+        else
+          echo "brew not found. Installing Homebrew (NONINTERACTIVE=1)..."
+          export NONINTERACTIVE=1
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo "Homebrew install attempted"
+        fi
 
-      - name: Run Setup Homebrew Zoomrecovery action
-        uses: ./             # if action files are in repo root; change to ./action-folder if needed
-        with:
-          tap: 'twinboi90/zoomrecovery'
-          package: 'zoomrecovery'
-
-      - name: Verify zoomrecovery is available
-        run: |
-          echo "PATH=$PATH"
-          if command -v zoomrecovery >/dev/null 2>&1; then
-            zoomrecovery --version || true
-          else
-            echo "zoomrecovery not found in PATH; checking brew list..."
-            brew list --versions zoomrecovery || true
+    - name: Discover Homebrew prefix
+      id: discover_prefix
+      shell: bash
+      run: |
+        set -euo pipefail
+        BREW_PREFIX=""
+        if command -v brew >/dev/null 2>&1; then
+          BREW_PREFIX=$(brew --prefix 2>/dev/null || true)
+        fi
+        # common fallbacks
+        for p in "/home/linuxbrew/.linuxbrew" "/opt/homebrew" "/usr/local"; do
+          if [ -z "${BREW_PREFIX}" ] && [ -d "${p}" ]; then
+            BREW_PREFIX="${p}"
           fi
+        done
+        echo "brew_prefix=${BREW_PREFIX}" >> "$GITHUB_OUTPUT"
+        echo "Detected brew prefix: ${BREW_PREFIX}"
 
-      - name: Show persisted envs
-        run: |
-          echo "LDFLAGS=$LDFLAGS"
-          echo "CPPFLAGS=$CPPFLAGS"
-          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
+    - name: Tap repository
+      shell: bash
+      run: |
+        set -euo pipefail
+        TAP="twinboi90/zoomrecovery"
+        echo "Tapping $TAP (idempotent)..."
+        if brew tap | grep -q "^${TAP}$"; then
+          echo "Tap $TAP already present"
+        else
+          brew tap "$TAP" || true
+        fi
+
+    - name: Install formula
+      shell: bash
+      run: |
+        set -euo pipefail
+        PKG="zoomrecovery"
+        echo "Installing formula $PKG (idempotent)..."
+        # use NONINTERACTIVE to avoid prompts on Linux
+        env NONINTERACTIVE=1 brew install "$PKG" || true
+
+    - name: Export environment for downstream steps
+      id: set_env
+      shell: bash
+      run: |
+        set -euo pipefail
+        PKG="zoomrecovery"
+        BREW_PREFIX="${{ steps.discover_prefix.outputs.brew_prefix }}"
+        # fallback if empty
+        if [ -z "$BREW_PREFIX" ]; then
+          if command -v brew >/dev/null 2>&1; then
+            BREW_PREFIX=$(brew --prefix 2>/dev/null || true)
+          fi
+        fi
+        if [ -z "$BREW_PREFIX" ]; then
+          echo "Could not determine brew prefix; attempting common locations"
+          for p in "/home/linuxbrew/.linuxbrew" "/opt/homebrew" "/usr/local"; do
+            if [ -d "$p" ]; then
+              BREW_PREFIX="$p"
+              break
+            fi
+          done
+        fi
+
+        OPT_DIR=""
+        if [ -n "$BREW_PREFIX" ]; then
+          OPT_DIR="$BREW_PREFIX/opt/$PKG"
+        fi
+        if [ -n "$OPT_DIR" ] && [ -d "$OPT_DIR" ]; then
+          echo "PATH=$OPT_DIR/bin:\$PATH" >> "$GITHUB_ENV"
+          echo "LDFLAGS=-L$OPT_DIR/lib" >> "$GITHUB_ENV"
+          echo "CPPFLAGS=-I$OPT_DIR/include" >> "$GITHUB_ENV"
+          echo "PKG_CONFIG_PATH=$OPT_DIR/lib/pkgconfig" >> "$GITHUB_ENV"
+        else
+          # best-effort: if brew is present, use its bin
+          if command -v brew >/dev/null 2>&1; then
+            BREW_BIN=$(brew --prefix 2>/dev/null)/bin || true
+            echo "PATH=$BREW_BIN:\$PATH" >> "$GITHUB_ENV"
+          fi
+        fi
+
+        # also surface outputs via GITHUB_OUTPUT
+        echo "package_prefix=${OPT_DIR}" >> "$GITHUB_OUTPUT"
+        echo "brew_prefix=${BREW_PREFIX}" >> "$GITHUB_OUTPUT"
+
+        echo "Exported environment variables for downstream steps"
