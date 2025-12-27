@@ -1,0 +1,32 @@
+name: Install Zoomrecovery (test)
+on:
+  workflow_dispatch:
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run Setup Homebrew Zoomrecovery action
+        uses: ./             # if action files are in repo root; change to ./action-folder if needed
+        with:
+          tap: 'twinboi90/zoomrecovery'
+          package: 'zoomrecovery'
+
+      - name: Verify zoomrecovery is available
+        run: |
+          echo "PATH=$PATH"
+          if command -v zoomrecovery >/dev/null 2>&1; then
+            zoomrecovery --version || true
+          else
+            echo "zoomrecovery not found in PATH; checking brew list..."
+            brew list --versions zoomrecovery || true
+          fi
+
+      - name: Show persisted envs
+        run: |
+          echo "LDFLAGS=$LDFLAGS"
+          echo "CPPFLAGS=$CPPFLAGS"
+          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
