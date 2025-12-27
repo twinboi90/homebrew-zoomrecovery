@@ -110,3 +110,9 @@ runs:
         echo "brew_prefix=${BREW_PREFIX}" >> "$GITHUB_OUTPUT"
 
         echo "Exported environment variables for downstream steps"
+{
+  "name": "homebrew-zoomrecovery",
+  "version": "1.0.0",
+  "description": "Placeholder package.json — not used by composite action",
+  "private": true
+}
