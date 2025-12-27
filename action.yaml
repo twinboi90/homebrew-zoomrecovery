@@ -1,0 +1,12 @@
+name: 'Setup Homebrew Zoomrecovery'
+description: 'Installs Homebrew (if missing), taps twinboi90/zoomrecovery, installs the zoomrecovery formula, and persists environment variables'
+inputs:
+  tap:
+    description: 'Homebrew tap to add (owner/repo)'
+    default: 'twinboi90/zoomrecovery'
+  package:
+    description: 'The Homebrew formula to install (default: zoomrecovery)'
+    default: 'zoomrecovery'
+runs:
+  using: 'node20'
+  main: './index.js'
