@@ -176,6 +176,7 @@ if [[ "$PARTIAL_MODE" = false ]]; then
       fi
     done
   fi
+  fi
 # Turn off Wi-Fi (if running with sudo)
 if [[ "$PARTIAL_MODE" = false ]]; then
   echo "[*] Turning off Wi-Fi ($WIFI_INTERFACE)..."
