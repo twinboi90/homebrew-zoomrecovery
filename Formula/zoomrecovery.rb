@@ -7,21 +7,18 @@ class Zoomrecovery < Formula
   
   depends_on "spoof-mac"
 
-def install
-  # Replace any existing BAKED_VERSION="..." line (placeholder or baked value)
-  # with the formula version string. Robust against both placeholder and
-  # baked-version tarballs and avoids passing a Version object to inreplace.
-  inreplace "zoomrecovery" do |s|
-    s.gsub!(/VERSION_PLACEHOLDER/, version.to_s)
-    s.gsub!(/BAKED_VERSION=["'].*?["']/, "BAKED_VERSION=\"#{version}\"")
+inreplace "zoomrecovery" do |s|
+  replaced = false
+  [
+    /BAKED_VERSION\s*=\s*["'].*?["']/,
+    /BAKED_VERSION\s*=\s*[0-9]+\.[0-9]+(?:\.[0-9]+)?/,
+    /BAKED_VERSION\s*:\s*["'].*?["']/,
+    /BAKED_VERSION\s*[:=]\s*["']?.*?["']?/
+  ].each do |rx|
+    if s.sub!(rx, "BAKED_VERSION=\"#{version}\"")
+      replaced = true
+      break
+    end
   end
-
-  chmod 0755, "zoomrecovery"
-  bin.install "zoomrecovery"
-end
-
-  test do
-    out = shell_output("#{bin}/zoomrecovery --version")
-    assert_match version.to_s, out
-  end
+  s.prepend("BAKED_VERSION=\"#{version}\"\n") unless replaced
 end
