@@ -10,4 +10,5 @@ inputs:
 runs:
   using: 'node20'
   main: './index.js'
-  icon: 'Award'
+  icon: 'award'
+  color: 'green'
