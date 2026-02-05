@@ -12,3 +12,6 @@ brew_bump_latest
 
 # Backup files
 *.bak
+
+# VS Code files
+*.vscode/*
