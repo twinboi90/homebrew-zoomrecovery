@@ -1,8 +1,8 @@
 class Zoomrecovery < Formula
   desc "Fix Zoom error 1132 by clearing corrupted database files"
   homepage "https://github.com/twinboi90/ZoomRecovery"
-  url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.0.20.tar.gz"
-  sha256 "5a20a22ff6319f8f9e362916e523a004e99e3362129ef70519273023f782646f"
+  url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.0.21.tar.gz"
+  sha256 "e5e6ad27bdb33a69d22810fb4cd441873a01e5824f5fc171a88b116ddf8e2e82"
   license "MIT"
 
   depends_on :macos
