@@ -1,17 +1,17 @@
 class Zoomrecovery < Formula
-  desc "Reset Zoom state and spoof network identity for Zoom"
+  desc "Fix Zoom error 1132 by clearing corrupted database files"
   homepage "https://github.com/twinboi90/ZoomRecovery"
-  url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.0.19.tar.gz"
-  sha256 "0e39974418609a262e07140e96493822a20fe44c088ba9ec19fb61049aa013f4"
-  version "1.0.19"
+  url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.0.20.tar.gz"
+  sha256 "5a20a22ff6319f8f9e362916e523a004e99e3362129ef70519273023f782646f"
+  license "MIT"
+
+  depends_on :macos
 
   def install
-    inreplace "zoomrecovery", "VERSION_PLACEHOLDER", version.to_s
-    chmod 0755, "zoomrecovery"
     bin.install "zoomrecovery"
   end
 
   test do
-    assert_match "zoomrecovery #{version}", shell_output("#{bin}/zoomrecovery --version")
+    assert_match "zoomrecovery", shell_output("#{bin}/zoomrecovery --version")
   end
 end
