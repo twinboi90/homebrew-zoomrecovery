@@ -1,53 +1,63 @@
-name: Auto-update zoomrecovery.rb on new release
+name: Update Formula on Release
 
 on:
-  repository_dispatch:
-    types: [release-trigger]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g., v1.0.20)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
 
 jobs:
   update-formula:
-    runs-on: macos-latest
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Clone tap repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Fetch latest release tag from ZoomRecovery
-        id: get_tag
+      - name: Calculate SHA256
+        id: sha
         run: |
-          TAG=$(curl -s https://api.github.com/repos/twinboi90/ZoomRecovery/releases/latest | jq -r .tag_name)
-          echo "Latest tag is: $TAG"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Download release tarball and compute SHA256
-        id: compute_sha
-        run: |
-          TAG=${{ steps.get_tag.outputs.tag }}
-          TARBALL_URL="https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/${TAG}.tar.gz"
-          echo "Tarball URL: $TARBALL_URL"
-
-          curl -L -o zoomrecovery.tar.gz "$TARBALL_URL"
-
-          SHA256=$(shasum -a 256 zoomrecovery.tar.gz | awk '{print $1}')
-          echo "SHA256: $SHA256"
+          VERSION="${{ github.event.inputs.version }}"
+          # Remove leading 'v' if present
+          VERSION_NUM="${VERSION#v}"
+          
+          # Download the tarball and calculate SHA256
+          TARBALL_URL="https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/${VERSION}.tar.gz"
+          SHA256=$(curl -sL "$TARBALL_URL" | shasum -a 256 | awk '{print $1}')
+          
+          echo "version=$VERSION_NUM" >> $GITHUB_OUTPUT
           echo "sha256=$SHA256" >> $GITHUB_OUTPUT
           echo "url=$TARBALL_URL" >> $GITHUB_OUTPUT
 
-      - name: Update Formula
+      - name: Update formula
         run: |
-          FORMULA="Formula/zoomrecovery.rb"
+          cat > Formula/zoomrecovery.rb <<'EOF'
+          class Zoomrecovery < Formula
+            desc "Fix Zoom error 1132 by clearing corrupted database files"
+            homepage "https://github.com/twinboi90/ZoomRecovery"
+            url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v${{ steps.sha.outputs.version }}.tar.gz"
+            sha256 "${{ steps.sha.outputs.sha256 }}"
+            license "MIT"
 
-          # Update the URL
-          sed -i '' "s|url \".*\"|url \"${{ steps.compute_sha.outputs.url }}\"|" "$FORMULA"
+            depends_on :macos
 
-          # Update the SHA256
-          sed -i '' "s|sha256 \".*\"|sha256 \"${{ steps.compute_sha.outputs.sha256 }}\"|" "$FORMULA"
+            def install
+              bin.install "zoomrecovery"
+            end
 
-      - name: Commit and push formula update
+            test do
+              assert_match "zoomrecovery", shell_output("#{bin}/zoomrecovery --version")
+            end
+          end
+          EOF
+
+      - name: Commit and push
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Formula/zoomrecovery.rb
-          git commit -m "Update zoomrecovery.rb to ${{ steps.get_tag.outputs.tag }}"
-          git push origin main
+          git commit -m "Update zoomrecovery to ${{ steps.sha.outputs.version }}"
+          git push
