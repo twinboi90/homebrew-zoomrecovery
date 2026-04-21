@@ -4,7 +4,7 @@ class Pyversion < Formula
   desc "Automatic Python version and virtualenv manager — one command that just works"
   homepage "https://github.com/twinboi90/pyversion"
   url "https://github.com/twinboi90/pyversion/archive/refs/tags/v0.1.1.tar.gz"
-  sha256 "7b7e7ab9d293282cb97be4ba192baa8a6edda67a63c3caf78b50d6ded3615716"
+  sha256 "fb596aa020da703943d0612b3f1008a75c275f566b712aab3648e3af18c783e1"
   license "MIT"
 
   depends_on "python@3.13"
