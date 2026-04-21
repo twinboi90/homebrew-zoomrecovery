@@ -3,8 +3,8 @@ class Pymanager < Formula
 
   desc "Automatic Python version and virtualenv manager — one command that just works"
   homepage "https://github.com/twinboi90/pymanager"
-  url "https://github.com/twinboi90/pymanager/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "bf02e184e24b2bf64d272531c97f5e8378305a8a165f3a1af081c4f9c5cc9bbe"
+  url "https://github.com/twinboi90/pymanager/archive/refs/tags/v0.1.1.tar.gz"
+  sha256 "7b7e7ab9d293282cb97be4ba192baa8a6edda67a63c3caf78b50d6ded3615716"
   license "MIT"
 
   depends_on "python@3.13"
