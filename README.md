@@ -1,21 +1,25 @@
-# ZoomRecovery
+# homebrew-tap
 
-A macOS utility to automatically resolve Zoom Error 1132 and relaunch Zoom.
+Homebrew formulae for tools by [@twinboi90](https://github.com/twinboi90).
 
-Zoom Error 1132 is a known issue that prevents some users from joining or hosting meetings. This script automates the recovery process by performing a targeted cleanup of Zoom-related user data and restarting the application in a clean state.
-
-## Features
-
-- Detects and resolves Error 1132 on Zoom
-- Restarts Zoom automatically after repair
-- Requires no manual intervention
-- macOS-only
-
-## Installation
-
-To install via Homebrew:
+## Usage
 
 ```bash
-brew tap twinboi90/zoomrecovery
-brew install zoomrecovery
+brew tap twinboi90/tap
+```
 
+Then install any formula:
+
+```bash
+brew install zoomrecovery
+brew install pyversion
+```
+
+## Formulae
+
+| Formula | Description |
+|---|---|
+| [zoomrecovery](https://github.com/twinboi90/zoomrecovery) | Recover corrupted or incomplete Zoom recordings |
+| [pyversion](https://github.com/twinboi90/pyversion) | Simple Python version management |
+
+For documentation, issues, and release notes, visit each formula's GitHub repository linked above.
