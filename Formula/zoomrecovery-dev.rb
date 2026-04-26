@@ -9,18 +9,18 @@ class ZoomrecoveryDev < Formula
   depends_on "openssl"
 
   def install
-    bin.install "zoomrecovery"
+    bin.install "zoomrecovery", "zoomrecovery-dev"
   end
 
   def post_install
     puts "\n⚠️  Development Version Installed"
     puts "This is a pre-release version for testing Zoom 7.0.0 compatibility."
-    puts "\nUsage: sudo zoomrecovery"
+    puts "\nUsage: sudo zoomrecovery-dev"
     puts "\nTo report issues or provide feedback:"
     puts "  https://github.com/twinboi90/ZoomRecovery/issues\n\n"
   end
 
   test do
-    system "#{bin}/zoomrecovery", "--version"
+    system "#{bin}/zoomrecovery-dev", "--version"
   end
 end
