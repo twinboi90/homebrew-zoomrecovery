@@ -9,7 +9,7 @@ class ZoomrecoveryDev < Formula
   depends_on "openssl"
 
   def install
-    bin.install "zoomrecovery", "zoomrecovery-dev"
+    bin.install "zoomrecovery" => "zoomrecovery-dev"
   end
 
   def post_install
