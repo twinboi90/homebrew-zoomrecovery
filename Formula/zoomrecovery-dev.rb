@@ -2,7 +2,7 @@ class ZoomrecoveryDev < Formula
   desc "Fix Zoom Error 1132 (Device Identification Conflict) - Development Version"
   homepage "https://github.com/twinboi90/ZoomRecovery"
   url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.2.0-dev.1.tar.gz"
-  sha256 "8105e540d4680762a943055cec10609192448cb812de9ffca2d51cb754880d79"
+  sha256 "bd40a4f8ba2ddc9387cf3fc2e5311ebf9bf5b5dea02485dd63c8879d3654826b"
   version "1.2.0-dev.1"
   license "MIT"
 
