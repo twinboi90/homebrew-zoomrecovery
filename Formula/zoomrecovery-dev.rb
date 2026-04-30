@@ -1,22 +1,32 @@
 class ZoomrecoveryDev < Formula
   desc "Fix Zoom Error 1132 (Device Identification Conflict) - Development Version"
   homepage "https://github.com/twinboi90/ZoomRecovery"
-  url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.2.0-dev.1.tar.gz"
-  sha256 "bd40a4f8ba2ddc9387cf3fc2e5311ebf9bf5b5dea02485dd63c8879d3654826b"
-  version "1.2.0-dev.1"
+  url "https://github.com/twinboi90/ZoomRecovery/archive/refs/tags/v1.3.0-dev.1.tar.gz"
+  sha256 "1fbb7cbf73345c9d2ea83b9fd1c84ee5ceb77dfc1ae9a43472f5065ea5e82a01"
+  version "1.3.0-dev.1"
   license "MIT"
 
   depends_on "openssl"
 
   def install
-    bin.install "zoomrecovery" => "zoomrecovery-dev"
+    bin.install "zoomrecovery-dev"
   end
 
   def post_install
     puts "\n⚠️  Development Version Installed"
-    puts "This is a pre-release version for testing Zoom 7.0.0 compatibility."
-    puts "\nUsage: sudo zoomrecovery-dev"
-    puts "\nTo report issues or provide feedback:"
+    puts "This is a pre-release version with sandbox-based identity masking"
+    puts "for Zoom 7.0.0+ on macOS (Intel and Apple Silicon)."
+    puts ""
+    puts "Usage: sudo zoomrecovery-dev"
+    puts ""
+    puts "What's new in v1.3.0-dev:"
+    puts "  - Sandbox-exec blocks Zoom from reading hardware IDs"
+    puts "  - Private Wi-Fi Address cycling for Apple Silicon + macOS 14+"
+    puts "  - Full cleanup of caches, preferences, and saved state"
+    puts "  - DNS cache flush"
+    puts "  - Selective data wipe (enc.db + viper.ini only)"
+    puts ""
+    puts "To report issues or provide feedback:"
     puts "  https://github.com/twinboi90/ZoomRecovery/issues\n\n"
   end
 
